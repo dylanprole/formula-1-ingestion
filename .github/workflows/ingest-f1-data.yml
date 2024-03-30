@@ -26,13 +26,13 @@ jobs:
       # Prep Google keyfile
       - run: mkdir -p "$(dirname $GOOGLE_APPLICATION_CREDENTIALS)"
       - run: echo "$KEYFILE_CONTENTS" > $GOOGLE_APPLICATION_CREDENTIALS
-      
+
       - name: Checkout Repo
         uses: actions/checkout@master
 
       - name: Build Docker container
         id: build
-        run: docker build -t f1-ingest:v1 ./data_ingestion
+        run: docker build -t f1-ingest:v1 ./data_ingestion/staging
 
       - name: Run Docker container
         id: run
