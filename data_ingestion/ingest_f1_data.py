@@ -20,6 +20,9 @@ f1_csv = 'http://ergast.com/downloads/f1db_csv.zip'
 # name of gcs bucket to save files
 BUCKET = os.environ.get("GCP_GCS_BUCKET", "dtc-data-lake-bucketname")
 
+credential_path = "/tmp/google/google-service-account.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credential_path
+
 def upload_to_gcs(bucket, object_name, local_file):
     """
     Ref: https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-python

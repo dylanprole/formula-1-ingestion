@@ -4,7 +4,7 @@ on:
   - push
 
 env:
-  GOOGLE_APPLICATION_CREDENTIALS: /tmp/google/google-service-account.json
+  SERVICE_ACCOUNT: /tmp/google/google-service-account.json
   GCP_GCS_BUCKET: taxi-rides-ny-412407-data-lake-development
   KEYFILE_CONTENTS: ${{ secrets.KEYFILE_CONTENTS }}
 
@@ -17,8 +17,8 @@ jobs:
       volumes:
         - ${{ github.workspace }}:/app
     steps:
-      - run: mkdir -p "$(dirname $GOOGLE_APPLICATION_CREDENTIALS)"
-      - run: echo "$KEYFILE_CONTENTS" > $GOOGLE_APPLICATION_CREDENTIALS
+      - run: mkdir -p "$(dirname $SERVICE_ACCOUNT)"
+      - run: echo "$KEYFILE_CONTENTS" > $SERVICE_ACCOUNT
 
       - name: Checkout repo
         uses: actions/checkout@v2
