@@ -1,6 +1,7 @@
 import io
 import os
 import requests
+import subprocess
 import zipfile
 import pandas as pd
 
@@ -55,9 +56,13 @@ def f1_to_gcs():
         # display current file
         print(f'File: {file}')
 
+        # Remove null characters "\N"
+        null_char = r'\\N'
+        subprocess.call([f"sed -i -e 's|{null_char}||g' {dir}/{file}"], shell=True)
+
         # upload it to gcs
         print('\tUploading to Google Storage...')
-        upload_to_gcs(BUCKET, f"{dir}/{file}", f'{dir}/{file}')
+        upload_to_gcs(BUCKET, file, f'{dir}/{file}')
 
         # clean up files
         print('\tUpload complete!')

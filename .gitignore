@@ -212,3 +212,5 @@ magic-zoomcamp
 *.json
 
 **.keys
+
+**.*venv
