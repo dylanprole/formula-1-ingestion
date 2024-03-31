@@ -35,8 +35,5 @@ jobs:
       - name: Run test Python
         run: python ./data_ingestion/hello.py
 
-      - name: Check contents of docker
-        run: ls /tmp/google/
-
       - name: Check env variables
         run: printenv
