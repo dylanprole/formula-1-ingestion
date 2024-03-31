@@ -26,14 +26,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      #- name: Install Python packages
-      #  run: pip install requests pandas pyarrow google-cloud-storage
+      - name: Install Python packages
+        run: pip install requests pandas pyarrow google-cloud-storage
 
       - name: List working directory contents
         run: ls
 
       - name: Run test Python
-        run: python ./data_ingestion/hello.py
+        run: python ./data_ingestion/ingest_f1_data.py
 
       - name: Check env variables
         run: printenv
