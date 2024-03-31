@@ -1,0 +1,38 @@
+name: Staging ingest f1 data to gcs using customer container
+
+on:
+  - push
+
+env:
+  GOOGLE_APPLICATION_CREDENTIALS: /tmp/google/google-service-account.json
+  KEYFILE_CONTENTS: ${{ secrets.KEYFILE_CONTENTS }}
+
+jobs:
+  run-python-container:
+    name: Run Python in Docker container
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.9.1
+      volumes:
+        - ${{ github.workspace }}:/app
+    steps:
+      - run: mkdir -p "$(dirname $GOOGLE_APPLICATION_CREDENTIALS)"
+      - run: echo "$KEYFILE_CONTENTS" > $GOOGLE_APPLICATION_CREDENTIALS
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install Python packages
+        run: pip install requests pandas pyarrow google-cloud-storage
+
+      - name: List working directory contents
+        run: ls
+
+      - name: Run test Python
+        run: python ./data_ingestion/hello.py
+
+      - name: Check contents of docker
+        run: ls /tmp/google/
+
+      - name: Check env variables
+        run: printenv
