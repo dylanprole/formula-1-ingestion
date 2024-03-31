@@ -1,0 +1,39 @@
+name: Staging ingest f1 data to gcs
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# Setting some Env variables to work  with profiles.yml
+env:
+  # dbt env variables used in your dbt profiles.yml
+  DBT_PROFILES_DIR: ./
+  GOOGLE_APPLICATION_CREDENTIALS: /tmp/google/google-service-account.json
+
+  # the contents of the keyfile pulled from GitHub Actions secrets
+  KEYFILE_CONTENTS: ${{secrets.KEYFILE_CONTENTS}}
+
+jobs:
+  deploy-terraform-staging:
+    name: "Build and run docker"
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      pull-requests: write
+
+    steps:
+      # Prep Google keyfile
+      - run: mkdir -p "$(dirname $GOOGLE_APPLICATION_CREDENTIALS)"
+      - run: echo "$KEYFILE_CONTENTS" > $GOOGLE_APPLICATION_CREDENTIALS
+
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Build Docker container
+        id: build
+        run: docker build -t f1-ingest:v1 ./data_ingestion/staging
+
+      - name: Run Docker container
+        id: run
+        run: docker run -it f1-ingest:v1

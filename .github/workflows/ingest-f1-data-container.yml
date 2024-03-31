@@ -1,0 +1,39 @@
+name: Staging ingest f1 data to gcs using customer container
+
+on:
+  - push
+
+env:
+  SERVICE_ACCOUNT: /tmp/google/google-service-account.json
+  GCP_GCS_BUCKET: taxi-rides-ny-412407-data-lake-development
+  KEYFILE_CONTENTS: ${{ secrets.KEYFILE_CONTENTS }}
+
+jobs:
+  run-python-container:
+    name: Run Python in Docker container
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.9.1
+      volumes:
+        - ${{ github.workspace }}:/app
+    steps:
+      #- run: mkdir -p "$(dirname $SERVICE_ACCOUNT)"
+      #- run: echo "$KEYFILE_CONTENTS" > $SERVICE_ACCOUNT
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.KEYFILE_CONTENTS }}' # Replace with the name of your GitHub Actions secret
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install Python packages
+        run: pip install requests pandas pyarrow google-cloud-storage
+
+      - name: List working directory contents
+        run: ls
+
+      - name: Run test Python
+        run: python ./data_ingestion/ingest_f1_data.py
+
+      - name: Check env variables
+        run: printenv
