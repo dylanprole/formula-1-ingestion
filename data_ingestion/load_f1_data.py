@@ -30,7 +30,7 @@ def load_bigquery(table, bucket_name):
         source_format=bigquery.SourceFormat.CSV,
     )
     database = 'taxi-rides-ny-412407'
-    schema = 'development_bronze'
+    schema = 'bronze'
 
     uri = f'gs://{bucket_name}/{table}.csv'
 
