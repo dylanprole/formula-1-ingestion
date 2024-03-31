@@ -29,12 +29,12 @@ def load_bigquery(table, bucket_name):
         # The source format defaults to CSV, so the line below is optional.
         source_format=bigquery.SourceFormat.CSV,
     )
-    project_id = 'taxi-rides-ny-412407'
-    database = 'development_bronze'
+    database = 'taxi-rides-ny-412407'
+    schema = 'development_bronze'
 
     uri = f'gs://{bucket_name}/{table}.csv'
 
-    table_id = f'{project_id}.{database}.{table}'
+    table_id = f'{database}.{schema}.{table}'
 
     load_job = client.load_table_from_uri(
         uri, table_id, job_config=job_config
