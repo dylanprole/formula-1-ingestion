@@ -5,6 +5,7 @@ on:
 
 env:
   GOOGLE_APPLICATION_CREDENTIALS: /tmp/google/google-service-account.json
+  GCP_GCS_BUCKET: taxi-rides-ny-412407-data-lake-development
   KEYFILE_CONTENTS: ${{ secrets.KEYFILE_CONTENTS }}
 
 jobs:
@@ -29,7 +30,7 @@ jobs:
         run: ls
 
       - name: Run test Python
-        run: python ./data_ingestion/hello.py
+        run: python ./data_ingestion/ingest_f1_data.py
 
       - name: Check contents of docker
         run: ls /tmp/google/
